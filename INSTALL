@@ -1,0 +1,9 @@
+Building The365Coin
+
+See doc/readme-qt.rst for instructions on building The365Coin Qt,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of The365Coin.
+
+See doc/build-*.txt for instructions on building The365Coind,
+the intended-for-services, no-graphical-interface, reference
+implementation of The365Coin.

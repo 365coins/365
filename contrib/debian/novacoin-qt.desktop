@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=The365Coin
+Comment=The365Coin P2P Cryptocurrency
+Comment[ru]=The365Coin, P2P криптовалюта
+Comment[fr]=The365Coin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=The365Coin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/The365Coin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/The365Coin80.xpm
+MimeType=x-scheme-handler/The365Coin;
+Categories=Office;

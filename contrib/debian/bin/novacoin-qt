@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -e
+
+umask 077
+
+basedir=~/.The365Coin
+dbfile="$basedir/DB_CONFIG"
+cfgfile="$basedir/The365Coin.conf"
+
+[ -e "$basedir" ] || mkdir "$basedir"
+
+# The365Coin does not clean up DB log files by default
+[ -e "$dbfile" ] || echo 'set_flags DB_LOG_AUTOREMOVE' > "$dbfile"
+
+exec /usr/lib/The365Coin/The365Coin-qt "$@"

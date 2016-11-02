@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: The365Coin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# The365Coin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable The365Coin service.
+# The365Coin_config (path): Set to /usr/local/etc/The365Coin.conf by default.
+# The365Coin_user:  The user account The365Coin daemon runs as. It uses 'root' user by default.
+# The365Coin_group: The group account The365Coin daemon runs as. It uses 'wheel' group by default.
+# The365Coin_datadir (str): Default to "/var/db/The365Coin". Base data directory.
+
+. /etc/rc.subr
+
+name=The365Coin
+rcvar=The365Coin_enable
+
+: ${The365Coin_enable:=NO}
+: ${The365Coin_config=/usr/local/etc/The365Coin.conf}
+: ${The365Coin_datadir=/var/db/The365Coin}
+: ${The365Coin_user="root"}
+: ${The365Coin_group="wheel"}
+
+required_files=${The365Coin_config}
+command=/usr/local/bin/The365Coind
+The365Coin_chdir=${The365Coin_datadir}
+pidfile="${The365Coin_datadir}/The365Coind.pid"
+stop_cmd=The365Coin_stop
+command_args="-conf=${The365Coin_config} -datadir=${The365Coin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+The365Coin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${The365Coin_datadir}
+	[ $? -eq 0 ] && chown -R ${The365Coin_user}:${The365Coin_group} ${The365Coin_datadir}
+}
+
+The365Coin_prestart()
+{
+	if [ ! -d "${The365Coin_datadir}/." ]; then
+		The365Coin_create_datadir || return 1
+	fi
+}
+
+The365Coin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+The365Coin_stop()
+{
+    The365Coin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${The365Coin_config} -datadir=${The365Coin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

@@ -1,0 +1,25 @@
+#!/usr/bin/make -f
+# -*- mode: makefile; coding: utf-8 -*-
+
+DEB_INSTALL_EXAMPLES_The365Coind += debian/examples/*
+DEB_INSTALL_MANPAGES_The365Coind += debian/manpages/*
+
+%:
+	dh --with bash-completion $@
+
+override_dh_auto_build:
+	cd src; $(MAKE) -f makefile.unix The365Coind USE_ASM=1 USE_LEVELDB=1
+	$(MAKE)
+
+override_dh_auto_clean:
+	if [ -f Makefile ]; then $(MAKE) clean; else rm -rf build/; rm -f The365Coin-qt; fi
+	cd src; $(MAKE) -f makefile.unix clean
+
+override_dh_auto_configure:
+	qmake The365Coin-qt.pro USE_ASM=1 USE_LEVELDB=1
+
+# Ensure wrapper is set executable
+binary-post-install/The365Coind:
+	chmod +x $(cdbs_curdestdir)usr/bin/The365Coind
+binary-post-install/The365Coin-qt:
+	chmod +x $(cdbs_curdestdir)usr/bin/The365Coin-qt

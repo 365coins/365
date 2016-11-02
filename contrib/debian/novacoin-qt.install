@@ -1,0 +1,5 @@
+The365Coin-qt usr/bin
+share/pixmaps/The365Coin32.xpm usr/share/pixmaps
+share/pixmaps/The365Coin80.xpm usr/share/pixmaps
+debian/The365Coin-qt.desktop usr/share/applications
+debian/The365Coin-qt.protocol usr/share/kde4/services/
